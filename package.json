@@ -1,24 +1,20 @@
 {
   "name": "firefox-profiler",
+  "publisher": "nisargjhaveri",
   "displayName": "Firefox Profiler",
   "description": "",
   "version": "0.0.1",
+  "repository": "https://github.com/nisargjhaveri/vscode-firefox-profiler",
+  "license": "MIT",
   "engines": {
-    "vscode": "^1.95.0"
+    "vscode": "^1.90.0"
   },
   "categories": [
     "Other"
   ],
   "activationEvents": [],
   "main": "./dist/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "firefox-profiler.helloWorld",
-        "title": "Hello World"
-      }
-    ]
-  },
+  "contributes": {},
   "scripts": {
     "vscode:prepublish": "yarn run package",
     "compile": "yarn run check-types && yarn run lint && node esbuild.js",
@@ -34,7 +30,7 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.95.0",
+    "@types/vscode": "^1.90.0",
     "@types/mocha": "^10.0.9",
     "@types/node": "20.x",
     "@typescript-eslint/eslint-plugin": "^8.10.0",
