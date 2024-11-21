@@ -14,7 +14,38 @@
   ],
   "activationEvents": [],
   "main": "./dist/extension.js",
-  "contributes": {},
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "firefox-profiler.viewer",
+        "displayName": "Firefox Profiler",
+        "selector": [
+          {
+            "filenamePattern": "*.json"
+          },
+          {
+            "filenamePattern": "*.trace"
+          },
+          {
+            "filenamePattern": "*.cpuprofile"
+          },
+          {
+            "filenamePattern": "*.perf"
+          },
+          {
+            "filenamePattern": "*.txt"
+          },
+          {
+            "filenamePattern": "*.gz"
+          },
+          {
+            "filenamePattern": "*"
+          }
+        ],
+        "priority": "option"
+      }
+    ]
+  },
   "scripts": {
     "vscode:prepublish": "yarn run package",
     "compile": "yarn run check-types && yarn run lint && node esbuild.js",
