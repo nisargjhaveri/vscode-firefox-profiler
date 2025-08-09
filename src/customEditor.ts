@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { getFirefoxProfilerWebviewContent } from './webview';
 
 export class FirefoxProfilerCustomDocument implements vscode.CustomDocument {
     constructor(public uri: vscode.Uri, private fileData: Uint8Array) {}
@@ -17,7 +18,6 @@ export class FirefoxProfilerCustomDocument implements vscode.CustomDocument {
 }
 
 export class FirefoxProfilerCustomEditor implements vscode.CustomEditorProvider<FirefoxProfilerCustomDocument> {
-    private static readonly profilerOrigin = "https://profiler.firefox.com/";
 
     public static register(context: vscode.ExtensionContext): void {
         const editor: vscode.CustomEditorProvider<FirefoxProfilerCustomDocument> = new FirefoxProfilerCustomEditor(context);
@@ -87,7 +87,7 @@ export class FirefoxProfilerCustomEditor implements vscode.CustomEditorProvider<
             enableScripts: true,
         };
 
-        webviewPanel.webview.html = this.getWebviewContent(FirefoxProfilerCustomEditor.profilerOrigin);
+        webviewPanel.webview.html = getFirefoxProfilerWebviewContent("from-post-message");
 
         let isProfilerReady = false;
         webviewPanel.webview.onDidReceiveMessage(async (message) => {
@@ -113,42 +113,5 @@ export class FirefoxProfilerCustomEditor implements vscode.CustomEditorProvider<
             // Inject the profile into the profiler
             webviewPanel.webview.postMessage({ name: 'inject-profile', profile: document.buffer });
         })();
-    }
-
-    getWebviewContent(profilerOrigin: string): string {
-        return `
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Firefox Profiler</title>
-    </head>
-    <body style="padding: 0">
-        <script>
-        (async function() {
-            const profilerOrigin = "${profilerOrigin}";
-            document.body.style.padding = '0';
-            document.body.style.overflow = 'hidden';
-
-            var iframe = document.createElement('iframe');
-            iframe.src = profilerOrigin + "/from-post-message/";
-            iframe.style.width = '100vw';
-            iframe.style.height = '100vh';
-            iframe.style.border = 'none';
-            document.body.appendChild(iframe);
-
-            const vscode = acquireVsCodeApi();
-            window.addEventListener('message', (message) => {
-                // Forward messages between VS Code and the profiler iframe
-                if (message.source === iframe.contentWindow) {
-                    vscode.postMessage(message.data);
-                } else {
-                    iframe.contentWindow.postMessage(message.data, profilerOrigin);
-                }
-            });
-        })();
-        </script>
-    </body>
-`;
     }
 }
