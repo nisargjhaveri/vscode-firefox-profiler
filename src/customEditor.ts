@@ -17,19 +17,27 @@ export class FirefoxProfilerCustomDocument implements vscode.CustomDocument {
 }
 
 export class FirefoxProfilerCustomEditor implements vscode.CustomEditorProvider<FirefoxProfilerCustomDocument> {
-    public static readonly viewType = 'firefox-profiler.viewer';
-    private static readonly profilerOrigin = "https://deploy-preview-5170--perf-html.netlify.app/";
+    private static readonly profilerOrigin = "https://profiler.firefox.com/";
 
-    public static register(context: vscode.ExtensionContext): vscode.Disposable {
-        return vscode.window.registerCustomEditorProvider(
-            FirefoxProfilerCustomEditor.viewType,
-            new FirefoxProfilerCustomEditor(context),
-            {
-                webviewOptions: {
-                    retainContextWhenHidden: true,
-                },
-            }
-        );
+    public static register(context: vscode.ExtensionContext): void {
+        const editor: vscode.CustomEditorProvider<FirefoxProfilerCustomDocument> = new FirefoxProfilerCustomEditor(context);
+        const editorOptions = {
+            webviewOptions: {
+                retainContextWhenHidden: true,
+            },
+        };
+
+        context.subscriptions.push(vscode.window.registerCustomEditorProvider(
+            "firefox-profiler.viewer",
+            editor,
+            editorOptions
+        ));
+
+        context.subscriptions.push(vscode.window.registerCustomEditorProvider(
+            "firefox-profiler.viewer.optional",
+            editor,
+            editorOptions
+        ));
     }
 
     constructor(

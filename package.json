@@ -21,25 +21,29 @@
         "displayName": "Firefox Profiler",
         "selector": [
           {
-            "filenamePattern": "*.json"
+            "filenamePattern": "{*.trace,*.trace.gz}"
           },
           {
-            "filenamePattern": "*.trace"
+            "filenamePattern": "{*.cpuprofile,*.cpuprofile.gz}"
           },
           {
-            "filenamePattern": "*.cpuprofile"
+            "filenamePattern": "{*.perf,*.perf.gz}"
           },
           {
-            "filenamePattern": "*.perf"
+            "filenamePattern": "{perf.json,*.perf.json,*.json.gz}"
           },
           {
-            "filenamePattern": "*.txt"
-          },
+            "filenamePattern": "{*.perf.txt,*.perf.txt.gz}"
+          }
+        ],
+        "priority": "default"
+      },
+      {
+        "viewType": "firefox-profiler.viewer.optional",
+        "displayName": "Firefox Profiler (Optional)",
+        "selector": [
           {
-            "filenamePattern": "*.gz"
-          },
-          {
-            "filenamePattern": "*"
+            "filenamePattern": "{*.json,*.txt,*.gz,*}"
           }
         ],
         "priority": "option"
